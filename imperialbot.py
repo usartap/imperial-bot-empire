@@ -7,11 +7,12 @@ import base64
 # Sertifikat xəbərdarlıqlarını tamamilə gizlət
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# Sizin Pantheon Canlı İnteqrasiya Linkiniz (Dəqiq və Bloklanmayan Format)
-SITE_URL = "https://pantheonsite.io"
+# Sizin Dəqiq və Doğrudan API Ünvanınız
+API_URL = "https://pantheonsite.io"
 WP_USER = "admin"
 WP_APP_PASS = "JDZl seRQ fHjN W3yl QRB2 gl4t"
 
+# Botun yazacağı ingiliscə sınaq məqalələri
 SAMPLE_POSTS = [
     {
         "title": "How to Fix QuickBooks Error Code H202 on Windows 11 Easily",
@@ -24,9 +25,6 @@ SAMPLE_POSTS = [
 ]
 
 def post_to_wordpress(title, content):
-    # API nöqtəsini tam olaraq sizin alt domenə kilidləyirik
-    api_url = f"{SITE_URL.strip('/')}/wp-json/wp/v2/posts"
-    
     # Giriş məlumatlarını Base64 formatına salırıq
     credential_string = f"{WP_USER}:{WP_APP_PASS}"
     credential_bytes = credential_string.encode('utf-8')
@@ -44,12 +42,12 @@ def post_to_wordpress(title, content):
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
     
-    print(f"Müraciət ünvanı: {api_url}")
-    print("Məqalə göndərilir, zəhmət olmasa gözləyin...")
+    print(f"Müraciət birbaşa bu ünvana göndərilir: {API_URL}")
+    print("Məqalə ötürülür, zəhmət olmasa gözləyin...")
     
     try:
         response = requests.post(
-            api_url, 
+            API_URL, 
             headers=headers, 
             data=json.dumps(payload), 
             timeout=30, 
@@ -58,12 +56,13 @@ def post_to_wordpress(title, content):
         
         if response.status_code == 201:
             print(f"\n[UĞURLU] Məqalə avtomatik olaraq sayta yükləndi: {title}")
+            print("Yoxlamaq üçün saytınızın ana səhifəsini yeniləyin!")
         else:
             print(f"\nXəta kodu: {response.status_code}")
             print(f"Cavab: {response.text}")
             
     except Exception as e:
-        print(f"\nBağlantı qırıldı: {e}")
+        print(f"\nBağlantı zamanı xəta yarandı: {e}")
 
 if __name__ == "__main__":
     chosen_post = random.choice(SAMPLE_POSTS)
