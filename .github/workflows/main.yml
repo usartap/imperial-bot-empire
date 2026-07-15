@@ -1,0 +1,24 @@
+name: Run Imperial AI Bot
+
+on:
+  schedule:
+    - cron: '0 */4 * * *' # Hər 4 saatdan bir kodu avtomatik oyat və işlət
+  workflow_dispatch: # İstədiyimiz an əllə işə salmaq üçün düymə aktiv edir
+
+jobs:
+  run-bot:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Install Libraries
+      run: pip install -r requirements.txt
+
+    - name: Run Script
+      run: python imperialbot.py
