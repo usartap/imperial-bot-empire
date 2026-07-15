@@ -7,12 +7,11 @@ import base64
 # Sertifikat xəbərdarlıqlarını tamamilə gizlət
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-# Sizin Dəqiq Pantheon WordPress Məlumatlarınız
+# Sizin Pantheon Canlı İnteqrasiya Linkiniz (Dəqiq və Bloklanmayan Format)
 SITE_URL = "https://pantheonsite.io"
 WP_USER = "admin"
 WP_APP_PASS = "JDZl seRQ fHjN W3yl QRB2 gl4t"
 
-# Botun quraşdıracağı ilk ingiliscə sınaq məqalələri
 SAMPLE_POSTS = [
     {
         "title": "How to Fix QuickBooks Error Code H202 on Windows 11 Easily",
@@ -25,10 +24,10 @@ SAMPLE_POSTS = [
 ]
 
 def post_to_wordpress(title, content):
-    # API nöqtəsini birbaşa alt domen üzərindən qururuq
-    api_url = f"{SITE_URL}/wp-json/wp/v2/posts"
+    # API nöqtəsini tam olaraq sizin alt domenə kilidləyirik
+    api_url = f"{SITE_URL.strip('/')}/wp-json/wp/v2/posts"
     
-    # Giriş məlumatlarını rəsmi rəqəmsal standarta (Base64 Basic Auth) çeviririk
+    # Giriş məlumatlarını Base64 formatına salırıq
     credential_string = f"{WP_USER}:{WP_APP_PASS}"
     credential_bytes = credential_string.encode('utf-8')
     base64_credentials = base64.b64encode(credential_bytes).decode('utf-8')
@@ -39,14 +38,14 @@ def post_to_wordpress(title, content):
         "status": "publish"
     }
     
-    # Gücləndirilmiş başlıqlar (Headers)
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Basic {base64_credentials}",
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
     
-    print("Məqalə təhlükəsiz xətt üzərindən göndərilir, gözləyin...")
+    print(f"Müraciət ünvanı: {api_url}")
+    print("Məqalə göndərilir, zəhmət olmasa gözləyin...")
     
     try:
         response = requests.post(
@@ -59,13 +58,12 @@ def post_to_wordpress(title, content):
         
         if response.status_code == 201:
             print(f"\n[UĞURLU] Məqalə avtomatik olaraq sayta yükləndi: {title}")
-            print(f"Yoxlamaq üçün klikləyin: {SITE_URL}")
         else:
-            print(f"\nXəta baş verdi. Server kodu: {response.status_code}")
-            print(f"Serverin cavabı: {response.text}")
+            print(f"\nXəta kodu: {response.status_code}")
+            print(f"Cavab: {response.text}")
             
     except Exception as e:
-        print(f"\nBağlantı zamanı xəta yarandı: {e}")
+        print(f"\nBağlantı qırıldı: {e}")
 
 if __name__ == "__main__":
     chosen_post = random.choice(SAMPLE_POSTS)
