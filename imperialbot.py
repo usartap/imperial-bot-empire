@@ -12,7 +12,6 @@ API_URL = "https://pantheonsite.io"
 WP_USER = "admin"
 WP_APP_PASS = "JDZl seRQ fHjN W3yl QRB2 gl4t"
 
-# Botun yazacağı ingiliscə sınaq məqalələri
 SAMPLE_POSTS = [
     {
         "title": "How to Fix QuickBooks Error Code H202 on Windows 11 Easily",
@@ -20,12 +19,11 @@ SAMPLE_POSTS = [
     },
     {
         "title": "Fix: Photoshop 2026 Random Crash on M3 Mac Devices During Export",
-        "content": "<!-- wp:paragraph --><p>Many graphic designers are reporting that Photoshop 2026 unexpectedly crashes on M3 Max and M3 Pro Macs during the image export process. Here is the permanent solution.</p><!-- /wp:paragraph --><!-- wp:heading --><h2>Step 1: Disable GPU Acceleration Temporarily</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Go to Preferences > Performance and uncheck Use Graphics Processor. Restart Photoshop and try exporting again.</p><!-- /wp:paragraph -->"
+        "content": "<!-- wp:paragraph --><p>Many graphic designers are reporting that Photoshop 2026 unexpectedly crashes on M3 Max and M3 Pro Macs during the image export process. Here is the permanent solution.</p><!-- /wp:permanent solution. --><!-- wp:heading --><h2>Step 1: Disable GPU Acceleration Temporarily</h2><!-- /wp:heading --><!-- wp:paragraph --><p>Go to Preferences > Performance and uncheck Use Graphics Processor. Restart Photoshop and try exporting again.</p><!-- /wp:paragraph -->"
     }
 ]
 
 def post_to_wordpress(title, content):
-    # Giriş məlumatlarını Base64 formatına salırıq
     credential_string = f"{WP_USER}:{WP_APP_PASS}"
     credential_bytes = credential_string.encode('utf-8')
     base64_credentials = base64.b64encode(credential_bytes).decode('utf-8')
@@ -39,7 +37,7 @@ def post_to_wordpress(title, content):
     headers = {
         "Content-Type": "application/json",
         "Authorization": f"Basic {base64_credentials}",
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
     }
     
     print(f"Müraciət birbaşa bu ünvana göndərilir: {API_URL}")
@@ -56,7 +54,6 @@ def post_to_wordpress(title, content):
         
         if response.status_code == 201:
             print(f"\n[UĞURLU] Məqalə avtomatik olaraq sayta yükləndi: {title}")
-            print("Yoxlamaq üçün saytınızın ana səhifəsini yeniləyin!")
         else:
             print(f"\nXəta kodu: {response.status_code}")
             print(f"Cavab: {response.text}")
